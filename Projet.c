@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
+#include <errno.h>
 
 // typedef struct {
 //     char name[50];
@@ -24,46 +26,51 @@ typedef struct {
     float hp;
     int classe;
     int etat;
-    Sort s;
-    Coup c;
+    //Sort s;
+    //Coup c;
  } Personnage;
 
-Personnage readPersonnage() {
-    Personnage perso;
-    // Personnage.name[20] = 
-    // Personnage.att = 
-    // Personnage.def =
-    // Personnage.hpmax =
-    // Personnage.dodge =
-    // Personnage.dodge =
-    // Personnage.speed =
-    // Personnage.hp =
-    // Personnage.classe =
-    // Personnage.etat =
-    strcpy(perso.name,"Zed");
-    return perso;
+int split(char* string, char* delim) {
+    char *ptr = strtok(strtok(string, "\n"), delim);
+
+    while (ptr != NULL)
+    {
+        printf("'%s'\n", ptr);
+        ptr = strtok(NULL, delim);
+    }
+
+// créer un tableau
+
+    return 0;
+}
+
+int readPersonnage() {
+    FILE* registre = NULL;
+    char newPerso[100];
+
+    //ouvrir le fichier 
+    registre=fopen("Persos.txt","r");
+    if (registre == NULL) {
+        printf("Erreur d'ouverture de fichier");
+        printf("code d'erreur = %d \n", errno);
+        printf("Message d'erreur = %s \n", strerror(errno));
+        exit(1);
+    }
+
+    //lire le fichier ligne par ligne dans une boucle
+    while(fgets(newPerso , 99 , registre) != NULL) {
+        split(newPerso, " ");
+    }
+
+    //Pour chaque ligne instancier un perso de la classe Personnage
+    return 0;
 }
 
 int main() {
     Personnage p ;
+    readPersonnage();
     // do{
     //     printf("    Bienvenue dans CY Fighters\n    Appuyez sur 'a' pour continuer.\n    Appuyez sur 'b' pour sortir du jeu.");
-    // while (getchar =! 'a' & getchar=! 'b')}
-    int main() {
-
-   Personnage p = {
-      "Zed",   //name
-      0.5,     //att
-      0.5,     //def
-      100,     //hpmax
-      0.5,     //dodge
-      0.5,     //speed
-      100,     //hp
-      0,       //classe
-      0        //etat
-   };
-
-   printf("\nPerso créé : %s\n", p.name);
-
+    // while (getchar =! 'a' & getchar=! 'b')
    return 0;
 }
