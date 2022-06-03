@@ -32,7 +32,7 @@ typedef struct {
 
 Personnage listePersos[7];
 
-int readNouveauPersonnage(char* string, char* delim) {          //Fonction pour séparer les infos des personnages
+Personnage readNouveauPersonnage(char* string, char* delim) {          //Fonction pour séparer les infos des personnages
     char *ptr = strtok(strtok(string, "\n"), delim);
     
     int i = 0;
@@ -78,7 +78,7 @@ int readNouveauPersonnage(char* string, char* delim) {          //Fonction pour 
                 tmp_etat=atoi(ptr);
                 break;   
         }
-        i+=1;
+        i++;
         ptr = strtok(NULL, delim);
     }
 
@@ -93,15 +93,14 @@ int readNouveauPersonnage(char* string, char* delim) {          //Fonction pour 
     newPerso.hp = tmp_hp;
     newPerso.classe = tmp_classe;
     newPerso.etat = tmp_etat;
-
-    printf("%d",newPerso.att);
     
-    return 0;
+    return newPerso;
 }
 
-int definePersonnnages() {
+void definePersonnnages() {
     FILE* registre = NULL;
     char newPerso[100];
+    int i=0; 
 
     //ouvrir le fichier 
     registre=fopen("Persos.txt","r");
@@ -114,18 +113,19 @@ int definePersonnnages() {
 
     //lire le fichier ligne par ligne dans une boucle
     while(fgets(newPerso , 99 , registre) != NULL) {
-        readNouveauPersonnage(newPerso, " ");
+        listePersos[i]=readNouveauPersonnage(newPerso, " ");
+        i+=1;
     }
 
     //Pour chaque ligne instancier un perso de la classe Personnage
-    return 0;
 }
 
 int main() {
-    Personnage p ;
     definePersonnnages();
-    // do{
-    //     printf("    Bienvenue dans CY Fighters\n    Appuyez sur 'a' pour continuer.\n    Appuyez sur 'b' pour sortir du jeu.");
-    // while (getchar =! 'a' & getchar=! 'b')
-   return 0;
+    int nmbPersosDispo = sizeof(listePersos)/sizeof(listePersos[0]);
+    printf("Vous avez le choix de jouer avec : \n");
+    for(int i=0 ; i<nmbPersosDispo ; i++) {
+        printf("- %s\n",listePersos[i].name);
+    }
+    return 0;
 }
