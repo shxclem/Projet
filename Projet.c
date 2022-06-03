@@ -34,7 +34,9 @@ Personnage listePersos[7];
 
 int readNouveauPersonnage(char* string, char* delim) {          //Fonction pour séparer les infos des personnages
     char *ptr = strtok(strtok(string, "\n"), delim);
+    
     int i = 0;
+    
     char tmp_name[20];
     int tmp_att;
     int tmp_def;
@@ -44,11 +46,12 @@ int readNouveauPersonnage(char* string, char* delim) {          //Fonction pour 
     int tmp_hp;
     int tmp_classe;
     int tmp_etat;
+    
     while (ptr != NULL)
     {
         switch(i) {
             case 0 : 
-                tmp_name[20]=ptr;
+                strcpy(tmp_name, ptr);
                 break;
             case 1 : 
                 tmp_att=atoi(ptr);
@@ -79,9 +82,9 @@ int readNouveauPersonnage(char* string, char* delim) {          //Fonction pour 
         ptr = strtok(NULL, delim);
     }
 
-// créer nouveau personnage
+    // créer nouveau personnage
     Personnage newPerso;
-    strcpy(newPerso.name,tmp_name);
+    strcpy(newPerso.name, tmp_name);
     newPerso.att = tmp_att;
     newPerso.def = tmp_def;
     newPerso.hpmax = tmp_hpmax;
@@ -90,7 +93,9 @@ int readNouveauPersonnage(char* string, char* delim) {          //Fonction pour 
     newPerso.hp = tmp_hp;
     newPerso.classe = tmp_classe;
     newPerso.etat = tmp_etat;
+
     printf("%d",newPerso.att);
+    
     return 0;
 }
 
