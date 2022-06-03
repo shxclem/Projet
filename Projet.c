@@ -18,33 +18,83 @@
 
 typedef struct {
     char name[20];
-    float att;
-    float def;
-    float hpmax;
-    float dodge;
-    float speed;
-    float hp;
+    int att;
+    int def;
+    int hpmax;
+    int dodge;
+    int speed;
+    int hp;
     int classe;
     int etat;
     //Sort s;
     //Coup c;
  } Personnage;
 
-int split(char* string, char* delim) {
-    char *ptr = strtok(strtok(string, "\n"), delim);
+Personnage listePersos[7];
 
+int readNouveauPersonnage(char* string, char* delim) {          //Fonction pour séparer les infos des personnages
+    char *ptr = strtok(strtok(string, "\n"), delim);
+    int i = 0;
+    char tmp_name[20];
+    int tmp_att;
+    int tmp_def;
+    int tmp_hpmax;
+    int tmp_dodge;
+    int tmp_speed;
+    int tmp_hp;
+    int tmp_classe;
+    int tmp_etat;
     while (ptr != NULL)
     {
-        printf("'%s'\n", ptr);
+        switch(i) {
+            case 0 : 
+                tmp_name[20]=ptr;
+                break;
+            case 1 : 
+                tmp_att=atoi(ptr);
+                break;
+            case 2 : 
+                tmp_def=atoi(ptr);
+                break;
+            case 3 : 
+                tmp_hpmax=atoi(ptr);
+                break;
+            case 4 : 
+                tmp_dodge=atoi(ptr);
+                break;
+            case 5 : 
+                tmp_speed=atoi(ptr);
+                break;
+            case 6 : 
+                tmp_hp=atoi(ptr);
+                break;
+            case 7 : 
+                tmp_classe=atoi(ptr);
+                break;
+            case 8 : 
+                tmp_etat=atoi(ptr);
+                break;   
+        }
+        i+=1;
         ptr = strtok(NULL, delim);
     }
 
-// créer un tableau
-
+// créer nouveau personnage
+    Personnage newPerso;
+    strcpy(newPerso.name,tmp_name);
+    newPerso.att = tmp_att;
+    newPerso.def = tmp_def;
+    newPerso.hpmax = tmp_hpmax;
+    newPerso.dodge = tmp_dodge;
+    newPerso.speed = tmp_speed;
+    newPerso.hp = tmp_hp;
+    newPerso.classe = tmp_classe;
+    newPerso.etat = tmp_etat;
+    printf("%d",newPerso.att);
     return 0;
 }
 
-int readPersonnage() {
+int definePersonnnages() {
     FILE* registre = NULL;
     char newPerso[100];
 
@@ -59,7 +109,7 @@ int readPersonnage() {
 
     //lire le fichier ligne par ligne dans une boucle
     while(fgets(newPerso , 99 , registre) != NULL) {
-        split(newPerso, " ");
+        readNouveauPersonnage(newPerso, " ");
     }
 
     //Pour chaque ligne instancier un perso de la classe Personnage
@@ -68,7 +118,7 @@ int readPersonnage() {
 
 int main() {
     Personnage p ;
-    readPersonnage();
+    definePersonnnages();
     // do{
     //     printf("    Bienvenue dans CY Fighters\n    Appuyez sur 'a' pour continuer.\n    Appuyez sur 'b' pour sortir du jeu.");
     // while (getchar =! 'a' & getchar=! 'b')
