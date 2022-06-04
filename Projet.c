@@ -46,6 +46,7 @@ Personnage readNouveauPersonnage(char* string, char* delim) {          //Fonctio
     int tmp_hp;
     int tmp_classe;
     int tmp_etat;
+    int tmp_isAvailable = 1;
     
     while (ptr != NULL)
     {
@@ -93,7 +94,7 @@ Personnage readNouveauPersonnage(char* string, char* delim) {          //Fonctio
     newPerso.hp = tmp_hp;
     newPerso.classe = tmp_classe;
     newPerso.etat = tmp_etat;
-    newPerso.is_available = 1;
+    newPerso.is_available = tmp_isAvailable;
     
     return newPerso;
 }
@@ -122,41 +123,57 @@ void definePersonnnages() {                                         //Procédure
 
 }
 
+<<<<<<< HEAD
 Personnage Equipe1[2];                          //On définit la taille des deux
 Personnage Equipe2[2];                          //équipes qui vont s'affronter
 
 void defineEquipe() {                                                                      //Procédure permettant de créer les équipes
     bool equipeDef = false;
+=======
+void defineEquipe() {
+    int is_equipeDef = 0;
+>>>>>>> e522cf924b8f83a5ef9d5885eb52b21cfc04e6b2
     int nmbPersosDispo = sizeof(listePersos)/sizeof(listePersos[0]);
     int equipe_chosing = 1; 
-    int d = 0;
-    int n;           
+    int numPerso = 0;
+    int n;
+
     do {
         printf("Joueur %d : Choisissez le numero du personnage que vous souhaitez dans votre equipe ?\n", equipe_chosing);
         printf("Les personnages disponibles sont :\n");
+
         for(int i=0 ; i<=nmbPersosDispo ; i++) {
             if(listePersos[i].is_available == 1) {
                 printf("%d - %s\n",i,listePersos[i].name);
             }
         }
+
         scanf(" %d", &n);
+
+
+        
+
         if (listePersos[n].is_available == 0) {
-                printf("Ce personnage n'est pas disponible \n");
+            printf("Ce personnage n'est pas disponible \n");
         }
         else {
+
             if(equipe_chosing == 1) {
-                Equipe1[d] = listePersos[n];
+                memcpy(&listePersos[n], &Equipe1[numPerso], sizeof listePersos[n]);
                 equipe_chosing=2;
             }
             else if(equipe_chosing == 2) {
-                Equipe2[d] = listePersos[n];
+                memcpy(&listePersos[n], &Equipe2[numPerso], sizeof listePersos[n]);
                 equipe_chosing=1;
-                d++;
+                numPerso++;
             }
+
             listePersos[n].is_available=0;
+
         }
-    } while(!equipeDef);
+    } while(is_equipeDef == 0);
 }
+<<<<<<< HEAD
 int main() {                                                                                                     //Fonction principale 
     int fin = 0;
     printf("\n*--------------- BIENVENUE DANS CY-FIGHTERS ! ---------------*\n\n");                              // affichage du menu
@@ -189,3 +206,16 @@ int main() {                                                                    
 
     return 0;
 }
+=======
+
+int main() {
+    definePersonnnages();
+    //int nmbPersosDispo = sizeof(listePersos)/sizeof(listePersos[0]);
+    //printf("Vous avez le choix de jouer avec : \n");
+    //for(int i=0 ; i<nmbPersosDispo ; i++) {
+    //    printf("- %s\n",listePersos[i].name);
+    //}
+    defineEquipe();
+    return 0;
+}
+>>>>>>> e522cf924b8f83a5ef9d5885eb52b21cfc04e6b2
