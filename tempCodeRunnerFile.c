@@ -1,2 +1,2 @@
 
-    definePersonnnages();
+            if(equipe_chosing = 2) {

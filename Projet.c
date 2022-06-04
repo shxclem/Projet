@@ -27,7 +27,7 @@ typedef struct {
     int hp;
     int classe;
     int etat;
-    bool is_available;
+    int is_available;
     //Sort s;
     //Coup c;
  } Personnage;
@@ -97,6 +97,7 @@ Personnage readNouveauPersonnage(char* string, char* delim) {          //Fonctio
     newPerso.hp = tmp_hp;
     newPerso.classe = tmp_classe;
     newPerso.etat = tmp_etat;
+    newPerso.is_available = 1;
     
     return newPerso;
 }
@@ -129,31 +130,33 @@ void defineEquipe() {
     int nmbPersosDispo = sizeof(listePersos)/sizeof(listePersos[0]);
     int equipe_chosing = 1; 
     int d = 0;
-    int n;
+    int n;           
     do {
+        printf("%d", listePersos[7].is_available);
         printf("Joueur %d : Choisissez le numero du personnage que vous souhaitez dans votre equipe ?\n", equipe_chosing);
         printf("Les personnages disponibles sont :\n");
         for(int i=0 ; i<=nmbPersosDispo ; i++) {
-            if(listePersos[i].is_available = true) {
+            if(listePersos[i].is_available == 1) {
                 printf("%d - %s\n",i,listePersos[i].name);
             }
         }
-        scanf(" %d", n);
-        if (listePersos[n].is_available = false) {
+        scanf(" %d", &n);
+        if (listePersos[n].is_available == 0) {
                 printf("Ce personnage n'est pas disponible \n");
         }
-        else{
-            if(equipe_chosing = 1) {
+        else {
+            if(equipe_chosing == 1) {
                 Equipe1[d] = listePersos[n];
                 equipe_chosing=2;
             }
-            if(equipe_chosing = 2) {
+            else if(equipe_chosing == 2) {
                 Equipe2[d] = listePersos[n];
                 equipe_chosing=1;
                 d++;
-            }   
+            }
+            listePersos[n].is_available=0;
         }
-    } while(equipeDef = false);
+    } while(!equipeDef);
 }
 int main() {
     definePersonnnages();
@@ -163,5 +166,4 @@ int main() {
     //    printf("- %s\n",listePersos[i].name);
     //}
     defineEquipe();
-    return 0;
 }
