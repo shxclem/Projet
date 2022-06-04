@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <errno.h>
+#include <stdbool.h>
 
 // typedef struct {
 //     char name[50];
@@ -26,11 +27,14 @@ typedef struct {
     int hp;
     int classe;
     int etat;
+    bool is_available;
     //Sort s;
     //Coup c;
  } Personnage;
 
 Personnage listePersos[7];
+Personnage Equipe1[2];
+Personnage Equipe2[2];
 
 Personnage readNouveauPersonnage(char* string, char* delim) {          //Fonction pour séparer les infos des personnages
     char *ptr = strtok(strtok(string, "\n"), delim);
@@ -120,12 +124,44 @@ void definePersonnnages() {
     //Pour chaque ligne instancier un perso de la classe Personnage
 }
 
+void defineEquipe() {
+    bool equipeDef = false;
+    int nmbPersosDispo = sizeof(listePersos)/sizeof(listePersos[0]);
+    int equipe_chosing = 1; 
+    int d = 0;
+    int n;
+    do {
+        printf("Joueur %d : Choisissez le numero du personnage que vous souhaitez dans votre equipe ?\n", equipe_chosing);
+        printf("Les personnages disponibles sont :\n");
+        for(int i=0 ; i<=nmbPersosDispo ; i++) {
+            if(listePersos[i].is_available = true) {
+                printf("%d - %s\n",i,listePersos[i].name);
+            }
+        }
+        scanf(" %d", n);
+        if (listePersos[n].is_available = false) {
+                printf("Ce personnage n'est pas disponible \n");
+        }
+        else{
+            if(equipe_chosing = 1) {
+                Equipe1[d] = listePersos[n];
+                equipe_chosing=2;
+            }
+            if(equipe_chosing = 2) {
+                Equipe2[d] = listePersos[n];
+                equipe_chosing=1;
+                d++;
+            }   
+        }
+    } while(equipeDef = false);
+}
 int main() {
     definePersonnnages();
-    int nmbPersosDispo = sizeof(listePersos)/sizeof(listePersos[0]);
-    printf("Vous avez le choix de jouer avec : \n");
-    for(int i=0 ; i<nmbPersosDispo ; i++) {
-        printf("- %s\n",listePersos[i].name);
-    }
+    //int nmbPersosDispo = sizeof(listePersos)/sizeof(listePersos[0]);
+    //printf("Vous avez le choix de jouer avec : \n");
+    //for(int i=0 ; i<nmbPersosDispo ; i++) {
+    //    printf("- %s\n",listePersos[i].name);
+    //}
+    defineEquipe();
     return 0;
 }
