@@ -1,2 +1,2 @@
 
-            if(equipe_chosing = 2) {
+                break;

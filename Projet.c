@@ -17,7 +17,7 @@
 //     char description[500];
 // } Coup;
 
-typedef struct {
+typedef struct {                    // Création de la structure Personnage
     char name[20];
     int att;
     int def;
@@ -32,11 +32,7 @@ typedef struct {
     //Coup c;
  } Personnage;
 
-Personnage listePersos[7];
-Personnage Equipe1[2];
-Personnage Equipe2[2];
-
-Personnage readNouveauPersonnage(char* string, char* delim) {          //Fonction pour séparer les infos des personnages
+Personnage readNouveauPersonnage(char* string, char* delim) {          //Fonction pour créer un nouveau personnage
     char *ptr = strtok(strtok(string, "\n"), delim);
     
     int i = 0;
@@ -102,7 +98,9 @@ Personnage readNouveauPersonnage(char* string, char* delim) {          //Fonctio
     return newPerso;
 }
 
-void definePersonnnages() {
+Personnage listePersos[7];                      //On définit la taille de la liste des personnages
+
+void definePersonnnages() {                                         //Procédure permettant de lire la liste des personnages
     FILE* registre = NULL;
     char newPerso[100];
     int i=0; 
@@ -122,17 +120,18 @@ void definePersonnnages() {
         i+=1;
     }
 
-    //Pour chaque ligne instancier un perso de la classe Personnage
 }
 
-void defineEquipe() {
+Personnage Equipe1[2];                          //On définit la taille des deux
+Personnage Equipe2[2];                          //équipes qui vont s'affronter
+
+void defineEquipe() {                                                                      //Procédure permettant de créer les équipes
     bool equipeDef = false;
     int nmbPersosDispo = sizeof(listePersos)/sizeof(listePersos[0]);
     int equipe_chosing = 1; 
     int d = 0;
     int n;           
     do {
-        printf("%d", listePersos[7].is_available);
         printf("Joueur %d : Choisissez le numero du personnage que vous souhaitez dans votre equipe ?\n", equipe_chosing);
         printf("Les personnages disponibles sont :\n");
         for(int i=0 ; i<=nmbPersosDispo ; i++) {
@@ -158,12 +157,35 @@ void defineEquipe() {
         }
     } while(!equipeDef);
 }
-int main() {
-    definePersonnnages();
-    //int nmbPersosDispo = sizeof(listePersos)/sizeof(listePersos[0]);
-    //printf("Vous avez le choix de jouer avec : \n");
-    //for(int i=0 ; i<nmbPersosDispo ; i++) {
-    //    printf("- %s\n",listePersos[i].name);
-    //}
-    defineEquipe();
+int main() {                                                                                                     //Fonction principale 
+    int fin = 0;
+    printf("\n*--------------- BIENVENUE DANS CY-FIGHTERS ! ---------------*\n\n");                              // affichage du menu
+    printf("Que desirez-vous faire ?\n");
+    printf("1. Jouer au mode joueur contre joueur\n"
+           "2. Quitter\n");
+
+    int c;
+    c = getchar();
+    if(c != '\n' && c != EOF) {
+       int d;
+       while((d = getchar()) != '\n' && d != EOF);
+    }
+    switch(c) {
+        case '1':
+            printf("Vous avez selectionne le mode joueur contre joueur \n\n");
+            printf("Le jeu va commencer par une phase de conception des equipes.\n");
+            definePersonnnages();                   
+            defineEquipe();
+            break;
+
+        case '2':
+            printf("A bientot !");
+            fin = 1;
+            break;
+
+        default:
+            printf("Choix errone\n\n");
+    }
+
+    return 0;
 }
