@@ -4,19 +4,7 @@
 #include <errno.h>
 #include <stdbool.h>
 #include <unistd.h>
-
-// typedef struct {
-//     char name[50];
-//     char description[500];
-//     int att;
-//     int cd;
-//     int alt;
-// } Sort;
-
-// typedef Struct {
-//     char nom[30];
-//     char description[500];
-// } Coup;
+#include <time.h>
 
 typedef struct {                    // Création de la structure Personnage
     char name[20];
@@ -30,14 +18,12 @@ typedef struct {                    // Création de la structure Personnage
     int etat;
     int is_available;
     int team;
-    //Sort s;
-    //Coup c;
- } Personnage;
+} Personnage;
 
 Personnage listePersos[8];                                                                                       //On définit la taille de la liste des personnages
 Personnage Fighters[6];
 
-void ajouterPersoEquipe(int equipe, int num, int place) {
+void ajouterPersoEquipe(int equipe, int num, int place) {                                                        //Ajouter un perso dans une équipe
     Personnage newMember;
     
     strcpy(newMember.name, listePersos[num].name);
@@ -56,33 +42,33 @@ void ajouterPersoEquipe(int equipe, int num, int place) {
 
 }
 
-void fusionner(Personnage tab[], int debut, int milieu, int fin){
+void fusionner(Personnage tab[], int debut, int milieu, int fin){                                                //Procédures 
     int indexA, indexB, i;
-    int aux[6];
+    Personnage aux[6];
     indexA=debut;
     indexB=fin;
     //remplissage de la partie gauche du tableau aux
     for(i=debut;i<=milieu;i++){
-        aux[i]=tab[i].speed;
+        aux[i]=tab[i];
     }
     // remplissage de la partie droite du tableau aux
     for(i=milieu+1;i<=fin;i++){
-        aux[i]=tab[fin-i+milieu+1].speed;
+        aux[i]=tab[fin-i+milieu+1];
     }
     // tri de tab 
     for(i=debut;i<=fin;i++){
-        if(aux[indexA]<aux[indexB]){
-            tab[i].speed=aux[indexA];
+        if(aux[indexA].speed>aux[indexB].speed){
+            tab[i]=aux[indexA];
             indexA++;
         }
         else{
-            tab[i].speed=aux[indexB];
+            tab[i]=aux[indexB];
             indexB--;
         }
     }
 }
 
-void trifusionRec(Personnage tab[], int debut, int fin){
+void trifusionRec(Personnage tab[], int debut, int fin){                                                         //de
     int milieu;
     if(debut<fin){
         milieu=(debut+fin)/2;
@@ -96,7 +82,7 @@ void trifusionRec(Personnage tab[], int debut, int fin){
     }
 }
 
-void trifusion(Personnage tab[], int taille)
+void trifusion(Personnage tab[], int taille)                                                                     //tri
 {
 	trifusionRec (tab, 0,taille-1);
 }
@@ -234,8 +220,8 @@ void defineEquipes() {                                                          
     } while(!is_equipeDef);
 }
 
-int checkTeamAce() {
-    int hp_equipe1 = 0;
+int checkTeamAce() {                                                                                             //Fonction retournant si une équipe est éliminée ou non
+    int hp_equipe1 = 0; 
     int hp_equipe2 = 0;
 
     for(int i=0 ; i<=5 ; i++) {
@@ -247,10 +233,10 @@ int checkTeamAce() {
         }
     }
 
-    if(hp_equipe1 <= 0) {
+    if(hp_equipe1 == 0) {
         return 1;
     }
-    else if(hp_equipe2 <= 0) {
+    else if(hp_equipe2 == 0) {
         return 2;
     }
     else {
@@ -258,85 +244,147 @@ int checkTeamAce() {
     }
 }
 
+void attack(int attacker, int attacked) {                                                                        //Procédure qui correspond à une attaque
+    int rnd;
+    rnd = (rand())%101;
+
+    if (rnd < Fighters[attacked].dodge ) {
+        printf("Quelle agilite, %s evite l'attaque !\n", Fighters[attacked].name);
+        sleep(1);
+    }
+
+    else {
+        sleep(1);
+        float damage_reduction = ((float)Fighters[attacker].att) * ((float)Fighters[attacked].def / 100);
+        int damage = Fighters[attacker].att - damage_reduction;
+        Fighters[attacked].hp = Fighters[attacked].hp - damage;
+        printf("En plein de le mille ! %s souffre et perd %d hp !\n\n", Fighters[attacked].name, damage);
+        sleep(1);
+
+        if(Fighters[attacked].hp <=0 ) {
+            Fighters[attacked].hp = 0;
+            printf("%s n'a plus aucun pv, il succombe !\n", Fighters[attacked].name);
+            sleep(1);
+        }
+    }
+}
+
 int main() {                                                                                                     //Fonction principale 
     int fin = 0;
-    int speed[6];
+    int c;
+    c = getchar();
+
     printf("\n*--------------- BIENVENUE DANS CY-FIGHTERS ! ---------------*\n\n");                              //Affichage du menu
-    //sleep(2);
+    sleep(2);
     printf("Que desirez-vous faire ?\n");
-    //sleep(2);
+    sleep(2);
     printf("1. Jouer au mode joueur contre joueur\n"
            "2. Quitter\n");
 
-    int c;
-    c = getchar();
     if(c != '\n' && c != EOF) {                                                                                  //On récupère le caractère écrit par l'utilisateur
        int d;
        while((d = getchar()) != '\n' && d != EOF);
     }
-    switch(c) {
-        case '1':
-            printf("Vous avez selectionne le mode joueur contre joueur \n\n"                                               //Sélection des équipes
+
+    switch(c) {                                                                                                     //Différents choix possibles
+
+        case '1':                                                                                                          //L'utilisateur a décidé de jouer
+            printf("Vous avez selectionne le mode joueur contre joueur.\n\n"                                               //Sélection des équipes
                    "Le jeu va commencer par une phase de selection des heros.\n");
 
-            //sleep(2);
+            sleep(2);
 
             definePersonnnages();                   
             defineEquipes();
 
             printf("La phase de selection est terminee, les equipes sont les suivantes :\n"); 
 
-            //sleep(2);
+            sleep(2);
 
-            printf("EQUIPE 1 : %s, %s, %s\n", Fighters[0].name, Fighters[2].name, Fighters[4].name);
+            printf("EQUIPE 1 : %s, %s, %s\n", Fighters[0].name, Fighters[2].name, Fighters[4].name);                        //Affichage des équipes
             printf("EQUIPE 2 : %s, %s, %s\n", Fighters[1].name, Fighters[3].name, Fighters[5].name);
 
-            int hp_equipe1 = Fighters[0].hp + Fighters[2].hp + Fighters [4].hp;
-            int hp_equipe2 = Fighters[1].hp + Fighters[3].hp + Fighters [5].hp;
+            sleep(3);
+
+            trifusion(Fighters, 6);
 
             sleep(1);
 
-            printf("Maintenant, que le combat commence !\n\n");
+            printf("\nMaintenant, que le combat commence !\n\n");
             printf("**************** DEBUT DU COMBAT ****************\n\n");                                                  //Début du combat 
 
             sleep(1);
 
             int teamAce = 0;
             int a;
+            srand(time(NULL));
+
             while(teamAce == 0) {                                                                                               //Condition de fin de partie
 
                 for(int i=0 ; i<=5 ; i++) {                                                                                     //Déroulement du combat
-                    if(Fighters[i].hp > 0) {  
+                    if((Fighters[i].hp > 0) & (teamAce == 0)) {  
                         int attDone = 0;
             
                         do {
-                            printf("C'est au tour de %s d'attaquer\n", Fighters[i].name);
-                            printf("Joueur %d, ecrivez-le numero du heros que vous souhaitez attaquer ?\n", Fighters[i].team);
+                            sleep(1);
+                            printf("C'est au tour de %s d'attaquer.\n\n", Fighters[i].name);
+                            sleep(1);
+                            printf("Joueur %d, ecrivez le numero du heros que vous souhaitez attaquer ?\n", Fighters[i].team);
 
                             for(int j=0 ; j<=5 ; j++) {                                                                         //Affichage des cibles possibles
-                                    if(Fighters[j].team != Fighters[i].team) {
+                                    if(Fighters[j].team != Fighters[i].team ) {
                                         printf("%d - %s (%d hp)\n", j, Fighters[j].name, Fighters[j].hp);
                                     }
                             }
-                            scanf("%d", a);                                                                                     //Choix du joueur 
-                            
-                        } while(!attDone);
+                
+                            scanf("%d", &a); 
+                                                                                                               //Choix du joueur
+                            if((a < 0) || (a > 5)) {
+                                printf("Erreur, veuillez cibler un personnage disponible.\n");
+                                sleep(1);
+                            }
+
+                            else if(Fighters[a].team == Fighters[i].team) {
+                                printf("Ce heros fait partie de votre equipe, il vaudrait mieux attaquer vos adversaires !\n");
+                                sleep(1);
+                            }
+
+                            else if(Fighters[a].hp <= 0) {
+                                printf("Ce personnage est deja mort, veuillez en viser un autre. \n");
+                                sleep(1);
+                            }
+
+                            else {
+                                attack(i, a);
+                                teamAce = checkTeamAce(); 
+                                attDone = 1;
+                            }
+
+       
+                        } while(attDone == 0);
                     }   
                 }   
-                
-                teamAce = checkTeamAce();                                                                                       //Une équipe est-elle éliminée ?
+                                                                                                      //Une équipe est-elle éliminée ?
             }
-            printf("L'equipe %d a été eliminee !", teamAce );
+            printf("L'equipe %d a ete eliminee !\n", teamAce );
+            sleep(2);
+            if(teamAce == 1) {
+                printf("Joueur 2, c'est vous le meilleur, bravo pour votre victoire !\n");
+            }
+            else {
+                printf("Joueur 1, c'est vous le meilleur, bravo pour votre victoire !");
+            }
 
             break;
 
-        case '2':
+        case '2':                                                                                                               //L'utilisateur a décidé de quitter le programme
+
             printf("A bientot !");
             fin = 1;
             break;
 
-        default:
-            printf("Choix errone\n\n");
+        default:                                                                                                                //Le caractère écrit ne correspond à rien
+            printf("Choix errone.\n\n");
     }
 
     return 0;
