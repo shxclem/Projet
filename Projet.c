@@ -271,8 +271,6 @@ void attack(int attacker, int attacked) {                                       
 
 int main() {                                                                                                     //Fonction principale 
     int fin = 0;
-    int c;
-    c = getchar();
 
     printf("\n*--------------- BIENVENUE DANS CY-FIGHTERS ! ---------------*\n\n");                              //Affichage du menu
     sleep(2);
@@ -281,6 +279,8 @@ int main() {                                                                    
     printf("1. Jouer au mode joueur contre joueur\n"
            "2. Quitter\n");
 
+    int c;
+    c = getchar(); 
     if(c != '\n' && c != EOF) {                                                                                  //On récupère le caractère écrit par l'utilisateur
        int d;
        while((d = getchar()) != '\n' && d != EOF);
@@ -337,8 +337,7 @@ int main() {                                                                    
                                     }
                             }
                 
-                            scanf("%d", &a); 
-                                                                                                               //Choix du joueur
+                            scanf("%d", &a);                                                                                    //Choix du joueur
                             if((a < 0) || (a > 5)) {
                                 printf("Erreur, veuillez cibler un personnage disponible.\n");
                                 sleep(1);
@@ -356,17 +355,16 @@ int main() {                                                                    
 
                             else {
                                 attack(i, a);
-                                teamAce = checkTeamAce(); 
+                                teamAce = checkTeamAce();                                                                       //Une équipe est-elle éliminée 
                                 attDone = 1;
                             }
 
        
                         } while(attDone == 0);
                     }   
-                }   
-                                                                                                      //Une équipe est-elle éliminée ?
+                } 
             }
-            printf("L'equipe %d a ete eliminee !\n", teamAce );
+            printf("L'equipe %d a ete eliminee !\n", teamAce );                                                                 //Fin du jeu
             sleep(2);
             if(teamAce == 1) {
                 printf("Joueur 2, c'est vous le meilleur, bravo pour votre victoire !\n");
