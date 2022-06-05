@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <stdbool.h>
+#include <unistd.h>
 
 // typedef struct {
 //     char name[50];
@@ -98,7 +99,7 @@ Personnage readNouveauPersonnage(char* string, char* delim) {          //Fonctio
     return newPerso;
 }
 
-Personnage listePersos[7];                      //On définit la taille de la liste des personnages
+Personnage listePersos[7];                                         //On définit la taille de la liste des personnages
 
 void definePersonnnages() {                                         //Procédure permettant de lire la liste des personnages
     FILE* registre = NULL;
@@ -122,11 +123,11 @@ void definePersonnnages() {                                         //Procédure
 
 }
 
-Personnage Equipe1[2];                          //On définit la taille des deux
-Personnage Equipe2[2];                          //équipes qui vont s'affronter
+Personnage Equipe1[2];                                                                                           //On définit la taille des deux
+Personnage Equipe2[2];                                                                                           //équipes qui vont s'affronter
 
-void defineEquipe() {                                                                      //Procédure permettant de créer les équipes
-    int is_equpeDef = 0;
+void defineEquipes() {                                                                                           //Procédure permettant de créer les équipes
+    int is_equipeDef = 0;
     int nmbPersosDispo = sizeof(listePersos)/sizeof(listePersos[0]);
     int equipe_chosing = 1; 
     int numPerso = 0;
@@ -135,6 +136,7 @@ void defineEquipe() {                                                           
     do {
         printf("Joueur %d : Choisissez le numero du personnage que vous souhaitez dans votre equipe ?\n", equipe_chosing);
         printf("Les personnages disponibles sont :\n");
+        //sleep(1);
 
         for(int i=0 ; i<=nmbPersosDispo ; i++) {
             if(listePersos[i].is_available == 1) {
@@ -155,35 +157,64 @@ void defineEquipe() {                                                           
             }
             else if(equipe_chosing == 2) {
                 memcpy(&listePersos[n], &Equipe2[numPerso], sizeof listePersos[n]);
-                equipe_chosing=1;
+                equipe_chosing=1;                
                 numPerso++;
             }
 
             listePersos[n].is_available=0;
 
         }
+        
+        if(numPerso == 3){
+            is_equipeDef = 1;
+        }
+
     } while(is_equipeDef == 0);
 }
 
 int main() {                                                                                                     //Fonction principale 
     int fin = 0;
     printf("\n*--------------- BIENVENUE DANS CY-FIGHTERS ! ---------------*\n\n");                              // affichage du menu
+    //sleep(2);
     printf("Que desirez-vous faire ?\n");
+    //sleep(2);
     printf("1. Jouer au mode joueur contre joueur\n"
            "2. Quitter\n");
 
     int c;
     c = getchar();
-    if(c != '\n' && c != EOF) {
+    if(c != '\n' && c != EOF) {                                                                                            //On récupère le caractère écrit par l'utilisateur
        int d;
        while((d = getchar()) != '\n' && d != EOF);
     }
     switch(c) {
         case '1':
-            printf("Vous avez selectionne le mode joueur contre joueur \n\n");
-            printf("Le jeu va commencer par une phase de conception des equipes.\n");
+            printf("Vous avez selectionne le mode joueur contre joueur \n\n"                                               //Sélection des équipes
+                   "Le jeu va commencer par une phase de selection des heros.\n");
+            //sleep(2);
             definePersonnnages();                   
-            defineEquipe();
+            defineEquipes();
+            printf("La phase de selection est terminee, les equipes sont les suivantes :\n");                           
+            //sleep(2);
+            printf("EQUIPE 1 : %s, %s, %s\n", Equipe1[0].name, Equipe1[1].name, Equipe1[2].name);
+            printf("EQUIPE 2 : %s, %s, %s\n", Equipe2[0].name, Equipe2[1].name, Equipe2[2].name);
+            //sleep(1);
+            //printf("Maintenant, que le combat commence !\n");
+            //printf("**************** DEBUT DU COMBAT ****************\n");                                                  //Début du combat 
+            //sleep(1);
+            //int teamAce = 0;
+            //while(!teamAce) {                                                                                               //Condition de fin de partie
+            //    
+            //    if(Equipe1[0].hp <= 0 & Equipe1[1].hp <= 0 & Equipe1[2].hp <= 0) {
+            //        teamAce = 1;
+            //        printf("Les heros de l'equipe 1 sont morts, le joueur 2 remporte la partie !\n ");
+            //    }
+            //    if(Equipe2[0].hp <= 0 & Equipe2[1].hp <= 0 & Equipe2[2].hp <= 0) {
+            //        teamAce = 1;
+            //        printf("Les heros de l'equipe 1 sont morts, le joueur 2 remporte la partie !\n ");
+            //    }
+            //}
+
             break;
 
         case '2':
