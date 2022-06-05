@@ -1,7 +1,7 @@
 Zed 75 0 550 50 65 550 1 0 DeathMark Shuriken
-Kirua 75 0 520 50 70 550 1 0 Assassinat Decharge 
-Galio 45 45 680 5 45 680 2 0 Provocation Atomisation
-Karzhan 40 45 650 5 50 650 2 0 Hurlement VentViolent
+Kirua 80 0 520 50 70 550 1 0 Assassinat Decharge 
+Galio 40 45 680 5 45 680 2 0 Provocation Atomisation
+Karzhan 45 45 650 5 50 650 2 0 Hurlement VentViolent
 Mercy 30 20 480 15 20 480 3 0 Resurrection Soin 
 Orihime 30 20 480 15 25 480 3 0 Guerisons Soin
 Malzahar 55 20 520 20 30 520 4 0 Malediction Bacteries 
