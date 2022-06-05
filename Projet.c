@@ -34,7 +34,7 @@ typedef struct {                    // Création de la structure Personnage
     //Coup c;
  } Personnage;
 
-Personnage listePersos[7];                                                                                       //On définit la taille de la liste des personnages
+Personnage listePersos[8];                                                                                       //On définit la taille de la liste des personnages
 Personnage Fighters[6];
 
 void ajouterPersoEquipe(int equipe, int num, int place) {
@@ -56,46 +56,47 @@ void ajouterPersoEquipe(int equipe, int num, int place) {
 
 }
 
-void fusionner(int tab[], int debut, int milieu, int fin){
-  int indexA, indexB, i;
-  int aux[5];
-  indexA=debut;
-  indexB=fin;
-  //remplissage de la partie gauche du tableau aux
-  for(i=debut;i<=milieu;i++){
-    aux[i]=tab[i];
-  }
-  // remplissage de la partie droite du tableau aux
-  for(i=milieu+1;i<=fin;i++){
-    aux[i]=tab[fin-i+milieu+1];
-  }
-  // tri de tab 
-  for(i=debut;i<=fin;i++){
-    if(aux[indexA]<aux[indexB]){
-      tab[i]=aux[indexA];
-      indexA++;
+void fusionner(Personnage tab[], int debut, int milieu, int fin){
+    int indexA, indexB, i;
+    int aux[6];
+    indexA=debut;
+    indexB=fin;
+    //remplissage de la partie gauche du tableau aux
+    for(i=debut;i<=milieu;i++){
+        aux[i]=tab[i].speed;
     }
-    else{
-      tab[i]=aux[indexB];
-      indexB--;
+    // remplissage de la partie droite du tableau aux
+    for(i=milieu+1;i<=fin;i++){
+        aux[i]=tab[fin-i+milieu+1].speed;
     }
-  }
+    // tri de tab 
+    for(i=debut;i<=fin;i++){
+        if(aux[indexA]<aux[indexB]){
+            tab[i].speed=aux[indexA];
+            indexA++;
+        }
+        else{
+            tab[i].speed=aux[indexB];
+            indexB--;
+        }
+    }
 }
 
-void trifusionRec(int tab[], int debut, int fin){
-  int milieu;
+void trifusionRec(Personnage tab[], int debut, int fin){
+    int milieu;
     if(debut<fin){
-      milieu=(debut+fin)/2;
+        milieu=(debut+fin)/2;
     
-    //découpe du tableau par la gauche puis par la droite
-      trifusionRec(tab, debut,milieu);
-      trifusionRec(tab, milieu+1,fin);
-  //fusion des sous tableaux
-      fusionner(tab, debut, milieu,fin);
-      }
+        //découpe du tableau par la gauche puis par la droite
+        trifusionRec(tab, debut,milieu);
+        trifusionRec(tab, milieu+1,fin);
+
+        //fusion des sous tableaux
+        fusionner(tab, debut, milieu,fin);
+    }
 }
 
-void trifusion(int tab[], int taille)
+void trifusion(Personnage tab[], int taille)
 {
 	trifusionRec (tab, 0,taille-1);
 }
@@ -200,7 +201,7 @@ void defineEquipes() {                                                          
         printf("Les personnages disponibles sont :\n");
         //sleep(1);
 
-        for(int i=0 ; i<=nmbPersosDispo ; i++) {
+        for(int i=0 ; i<nmbPersosDispo ; i++) {
             if(listePersos[i].is_available) {
                 printf("%d - %s\n",i,listePersos[i].name);
             }
@@ -226,11 +227,35 @@ void defineEquipes() {                                                          
             listePersos[n].is_available=0;
         }
         
-        if(numPerso == 5){
+        if(numPerso == 6){
             is_equipeDef = 1;
         }
 
     } while(!is_equipeDef);
+}
+
+int checkTeamAce() {
+    int hp_equipe1 = 0;
+    int hp_equipe2 = 0;
+
+    for(int i=0 ; i<=5 ; i++) {
+        if(Fighters[i].team == 1) {
+            hp_equipe1 = hp_equipe1 + Fighters[i].hp;
+        }
+        else if(Fighters[i].team == 2) {
+            hp_equipe2 = hp_equipe2 + Fighters[i].hp;
+        }
+    }
+
+    if(hp_equipe1 <= 0) {
+        return 1;
+    }
+    else if(hp_equipe2 <= 0) {
+        return 2;
+    }
+    else {
+        return 0;
+    }
 }
 
 int main() {                                                                                                     //Fonction principale 
@@ -266,32 +291,42 @@ int main() {                                                                    
             printf("EQUIPE 1 : %s, %s, %s\n", Fighters[0].name, Fighters[2].name, Fighters[4].name);
             printf("EQUIPE 2 : %s, %s, %s\n", Fighters[1].name, Fighters[3].name, Fighters[5].name);
 
-            for(int i=0 ; i<=6 ; i++) {                                                                                    //Tri des vitesses pour l'ordre d'attaque
-                speed[i]=Fighters[i].speed;
-            }
-
-            trifusion(speed, 5);
-            for(int j=0 ; j<=5 ; j++){
-                printf("%d\n", speed[j]);
-            }
+            int hp_equipe1 = Fighters[0].hp + Fighters[2].hp + Fighters [4].hp;
+            int hp_equipe2 = Fighters[1].hp + Fighters[3].hp + Fighters [5].hp;
 
             sleep(1);
 
-            printf("Maintenant, que le combat commence !\n");
-            printf("**************** DEBUT DU COMBAT ****************\n");                                                  //Début du combat 
+            printf("Maintenant, que le combat commence !\n\n");
+            printf("**************** DEBUT DU COMBAT ****************\n\n");                                                  //Début du combat 
+
             sleep(1);
+
             int teamAce = 0;
-            while(!teamAce) {                                                                                               //Condition de fin de partie
+            int a;
+            while(teamAce == 0) {                                                                                               //Condition de fin de partie
+
+                for(int i=0 ; i<=5 ; i++) {                                                                                     //Déroulement du combat
+                    if(Fighters[i].hp > 0) {  
+                        int attDone = 0;
+            
+                        do {
+                            printf("C'est au tour de %s d'attaquer\n", Fighters[i].name);
+                            printf("Joueur %d, ecrivez-le numero du heros que vous souhaitez attaquer ?\n", Fighters[i].team);
+
+                            for(int j=0 ; j<=5 ; j++) {                                                                         //Affichage des cibles possibles
+                                    if(Fighters[j].team != Fighters[i].team) {
+                                        printf("%d - %s (%d hp)\n", j, Fighters[j].name, Fighters[j].hp);
+                                    }
+                            }
+                            scanf("%d", a);                                                                                     //Choix du joueur 
+                            
+                        } while(!attDone);
+                    }   
+                }   
                 
-                if(Fighters[0].hp <= 0 & Fighters[2].hp <= 0 & Fighters[4].hp <= 0) {
-                    teamAce = 1;
-                    printf("Les heros de l'equipe 1 sont morts, le joueur 2 remporte la partie !\n ");
-                }
-                if(Fighters[1].hp <= 0 & Fighters[3].hp <= 0 & Fighters[5].hp <= 0) {
-                    teamAce = 1;
-                    printf("Les heros de l'equipe 2 sont morts, le joueur 1 remporte la partie !\n ");
-                }
+                teamAce = checkTeamAce();                                                                                       //Une équipe est-elle éliminée ?
             }
+            printf("L'equipe %d a été eliminee !", teamAce );
 
             break;
 
