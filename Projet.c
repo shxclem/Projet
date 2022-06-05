@@ -33,6 +33,32 @@ typedef struct {                    // Création de la structure Personnage
     //Coup c;
  } Personnage;
 
+Personnage listePersos[7];                                         //On définit la taille de la liste des personnages
+Personnage Equipe1[2];                                                                                           //On définit la taille des deux
+Personnage Equipe2[2]; 
+
+void ajouterPersoEquipe(int equipe, int num, int place) {
+    Personnage newMember;
+    
+    strcpy(newMember.name, listePersos[num].name);
+    newMember.att = listePersos[num].att;
+    newMember.def = listePersos[num].def;
+    newMember.hpmax = listePersos[num].hpmax;
+    newMember.dodge = listePersos[num].dodge;
+    newMember.speed = listePersos[num].speed;
+    newMember.hp = listePersos[num].hp;
+    newMember.classe = listePersos[num].classe;
+    newMember.etat = listePersos[num].etat;
+    newMember.is_available = 1;
+
+    if(equipe == 1) {
+        Equipe1[place] = newMember;
+    }
+    else if(equipe == 2) {
+        Equipe2[place] = newMember;
+    }
+}
+
 Personnage readNouveauPersonnage(char* string, char* delim) {          //Fonction pour créer un nouveau personnage
     char *ptr = strtok(strtok(string, "\n"), delim);
     
@@ -99,8 +125,6 @@ Personnage readNouveauPersonnage(char* string, char* delim) {          //Fonctio
     return newPerso;
 }
 
-Personnage listePersos[7];                                         //On définit la taille de la liste des personnages
-
 void definePersonnnages() {                                         //Procédure permettant de lire la liste des personnages
     FILE* registre = NULL;
     char newPerso[100];
@@ -123,9 +147,6 @@ void definePersonnnages() {                                         //Procédure
 
 }
 
-Personnage Equipe1[2];                                                                                           //On définit la taille des deux
-Personnage Equipe2[2];                                                                                           //équipes qui vont s'affronter
-
 void defineEquipes() {                                                                                           //Procédure permettant de créer les équipes
     int is_equipeDef = 0;
     int nmbPersosDispo = sizeof(listePersos)/sizeof(listePersos[0]);
@@ -139,30 +160,29 @@ void defineEquipes() {                                                          
         //sleep(1);
 
         for(int i=0 ; i<=nmbPersosDispo ; i++) {
-            if(listePersos[i].is_available == 1) {
+            if(listePersos[i].is_available) {
                 printf("%d - %s\n",i,listePersos[i].name);
             }
         }
 
         scanf(" %d", &n);
 
-        if (listePersos[n].is_available == 0) {
+        if (!listePersos[n].is_available) {
                 printf("Ce personnage n'est pas disponible \n");
         }
         else {
 
             if(equipe_chosing == 1) {
-                memcpy(&listePersos[n], &Equipe1[numPerso], sizeof listePersos[n]);
+                ajouterPersoEquipe(1, n, numPerso);
                 equipe_chosing=2;
             }
             else if(equipe_chosing == 2) {
-                memcpy(&listePersos[n], &Equipe2[numPerso], sizeof listePersos[n]);
+                ajouterPersoEquipe(2, n, numPerso);
                 equipe_chosing=1;                
                 numPerso++;
             }
 
             listePersos[n].is_available=0;
-
         }
         
         if(numPerso == 3){
