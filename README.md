@@ -1,26 +1,7 @@
-# Projet
-Cy-fighters
+PROJET CY-FIGHTERS
+Ce projet a été réalisé par Clément DURECU et Maxime LADINI, élèves du groupe 4 Maths / Info.
 
-# git commands
-Check des modifs:
-`git status`
-
-Check des modifs plus poussé:
-`git diff`
-
-Ajouter les modifs pour préparer le commit:
-`git add *`
-
-Création du commit:
-`git commit -m "Message du commit"`
-
-Premier push des nouvelles branches: 
-`git push origin nom-de-la-branche-a-creer-sur-le-serveur"`
-
-Créer le lien entre dev local et serveur git:
-`git push --set-upstream origin nom-branche-sur-serveur`
-
-Pusher du code quand la branche est liée: 
-`git push`
-
-
+Il s'agit d'un jeu de combat en tour par tour type "Raid Shadow Legends".
+Notre jeu comporte 8 personnages possédant chacun des attributs différents, à vous d'établir la meilleure composition pour gagner !
+Il suffit de suivre les instructions du jeu pour savoir quoi faire à tout moment.
+Bon jeu !
